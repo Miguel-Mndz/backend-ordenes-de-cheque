@@ -7,12 +7,12 @@ export default async (req, res) => {
     switch (method) {
         case 'GET':
             try {
-                const consulta = "SELECT * FROM ordenes WHERE id_ordenes = $1"
+                const consulta = "SELECT * FROM proveedores WHERE id_proveedor = $1"
                 const valor = [query.id] //obteno el id del query string (URL)
                 const response = await conexion.query(consulta, valor)
 
                 if (response.rows.length === 0){
-                    return res.status(400).json({message: "Orden no existe"})
+                    return res.status(400).json({message: "Proveedor no existe"})
                 }
                 return res.json(response.rows[0])
                 
@@ -22,13 +22,13 @@ export default async (req, res) => {
         case 'PUT':
 
             try {
-                const {total_orden, id_provedor_orden, id_usuario_orden} = body
-                const consulta = "UPDATE ordenes SET total_orden = $1, id_provedor_orden = $2, id_usuario_orden =$3  WHERE id_ordenes = $4 RETURNING*"
-                const valor = [total_orden, id_provedor_orden, id_usuario_orden, query.id] //obteno el id del query string (URL)
+                const {nombre, direccion, telefono, ciudad, departamento, pais, nombre_contacto, telefono_contacto, email_contacto} = body
+                const consulta = "UPDATE proveedores SET nombre = $1, direccion = $2, telefono = $3, ciudad =$4, departamento =$5, pais = $6, nombre_contacto = $7, telefono_contacto = $8, email_contacto = $9  WHERE id_proveedor = $10 RETURNING*"
+                const valor = [nombre, direccion, telefono, ciudad, departamento, pais, nombre_contacto, telefono_contacto, email_contacto, query.id] //obteno el id del query string (URL)
                 const response = await conexion.query(consulta, valor)
 
                 if (response.rows.length === 0){
-                    return res.status(400).json({message: "Orden no existe"})
+                    return res.status(400).json({message: "Proveedor no existe"})
                 }
                 return res.json(response.rows[0])
                 
@@ -38,12 +38,12 @@ export default async (req, res) => {
             
         case 'DELETE':
             try {
-                const consulta = "DELETE FROM ordenes WHERE id_ordenes = $1 RETURNING*"
+                const consulta = "DELETE FROM proveedores WHERE id_proveedor = $1 RETURNING*"
                 const valor = [query.id] //obteno el id del query string (URL)
                 const response = await conexion.query(consulta, valor)
 
                 if (response.rowsCount === 0){
-                    return res.status(404).json({message: "Orden no existe"})
+                    return res.status(404).json({message: "Proveedor no existe"})
                 }
                 return res.json(response.rows[0])
                 
